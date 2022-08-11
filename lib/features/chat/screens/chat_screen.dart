@@ -284,6 +284,5 @@ class _ChatAvatar extends StatelessWidget {
         ),
       ),
     );
-    //vz8R8295p0is
   }
 }
