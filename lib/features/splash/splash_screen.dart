@@ -8,8 +8,12 @@ class SplashScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: const [
-            FlutterLogo(),
+            FlutterLogo(
+              size: 100,
+            ),
+            SizedBox(height: 16),
             Text(
               'The Chat App',
               style: TextStyle(
