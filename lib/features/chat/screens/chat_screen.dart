@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:surf_practice_chat_flutter/features/chat/models/chat_message_dto.dart';
+import 'package:surf_practice_chat_flutter/features/chat/models/chat_message_location_dto.dart';
 import 'package:surf_practice_chat_flutter/features/chat/models/chat_user_dto.dart';
 import 'package:surf_practice_chat_flutter/features/chat/models/chat_user_local_dto.dart';
 import 'package:surf_practice_chat_flutter/features/chat/repository/chat_repository.dart';
@@ -168,7 +169,9 @@ class _ChatMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Material(
-      color: chatData.chatUserDto is ChatUserLocalDto ? colorScheme.primary.withOpacity(.1) : null,
+      color: chatData.chatUserDto is ChatUserLocalDto
+          ? colorScheme.primary.withOpacity(.1)
+          : null,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 18,
@@ -189,6 +192,23 @@ class _ChatMessage extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(chatData.message ?? ''),
+                  Builder(builder: (context) {
+                    final chatMessageData = chatData;
+                    if (chatMessageData is ChatMessageGeolocationDto) {
+                      return Column(
+                        children: [
+                          Text(
+                            (chatData as ChatMessageGeolocationDto)
+                                .location
+                                .toString(),
+                            style: const TextStyle(color: Colors.green),
+                          ),
+                        ],
+                      );
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  }),
                 ],
               ),
             ),
@@ -213,6 +233,28 @@ class _ChatAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
+    String userInitials = '';
+    final fullName = userData.name;
+    if (fullName != null) {
+      final nameWords = fullName.split(' ');
+
+      if (nameWords.isNotEmpty) {
+        final firstName = nameWords.first;
+
+        if (firstName.isNotEmpty) {
+          userInitials += firstName.characters.first;
+        }
+
+        if (nameWords.length >= 2) {
+          final secondName = nameWords[1];
+
+          if (secondName.isNotEmpty) {
+            userInitials += secondName.characters.first;
+          }
+        }
+      }
+    }
+
     return SizedBox(
       width: _size,
       height: _size,
@@ -221,9 +263,7 @@ class _ChatAvatar extends StatelessWidget {
         shape: const CircleBorder(),
         child: Center(
           child: Text(
-            userData.name != null
-                ? '${userData.name!.split(' ').first[0]}${userData.name!.split(' ').last[0]}'
-                : '',
+            userInitials,
             style: TextStyle(
               color: colorScheme.onPrimary,
               fontWeight: FontWeight.bold,
@@ -233,5 +273,6 @@ class _ChatAvatar extends StatelessWidget {
         ),
       ),
     );
+    //vz8R8295p0is
   }
 }
