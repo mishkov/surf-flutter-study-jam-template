@@ -192,23 +192,7 @@ class _ChatMessage extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(chatData.message ?? ''),
-                  Builder(builder: (context) {
-                    final chatMessageData = chatData;
-                    if (chatMessageData is ChatMessageGeolocationDto) {
-                      return Column(
-                        children: [
-                          Text(
-                            (chatData as ChatMessageGeolocationDto)
-                                .location
-                                .toString(),
-                            style: const TextStyle(color: Colors.green),
-                          ),
-                        ],
-                      );
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  }),
+                  GeolocationAttachment(chatData: chatData),
                 ],
               ),
             ),
@@ -216,6 +200,36 @@ class _ChatMessage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class GeolocationAttachment extends StatelessWidget {
+  const GeolocationAttachment({
+    Key? key,
+    required this.chatData,
+  }) : super(key: key);
+
+  final ChatMessageDto chatData;
+
+  @override
+  Widget build(BuildContext context) {
+    return Builder(builder: (context) {
+      final chatMessageData = chatData;
+      if (chatMessageData is ChatMessageGeolocationDto) {
+        final location = chatMessageData.location;
+        final latitude = location.latitude.toStringAsFixed(4);
+        final longitude = location.longitude.toStringAsFixed(4);
+
+        final locationText =
+            'Attached location: $latitude, $longitude';
+        return Text(
+          locationText,
+          style: const TextStyle(color: Colors.green),
+        );
+      } else {
+        return const SizedBox.shrink();
+      }
+    });
   }
 }
 
