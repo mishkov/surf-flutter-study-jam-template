@@ -2,14 +2,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:surf_practice_chat_flutter/features/auth/models/token_dto.dart';
 
-class TokenStorate {
+class TokenStorage {
   static const _key = 'tokenDTO';
 
-  static TokenStorate instance = TokenStorate._();
+  static TokenStorage instance = TokenStorage._();
 
-  factory TokenStorate() => instance;
+  factory TokenStorage() => instance;
 
-  TokenStorate._();
+  TokenStorage._();
 
   Future<void> set(TokenDto token) async {
     final prefs = await SharedPreferences.getInstance();
