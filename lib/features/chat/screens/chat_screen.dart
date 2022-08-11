@@ -213,23 +213,20 @@ class GeolocationAttachment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Builder(builder: (context) {
-      final chatMessageData = chatData;
-      if (chatMessageData is ChatMessageGeolocationDto) {
-        final location = chatMessageData.location;
-        final latitude = location.latitude.toStringAsFixed(4);
-        final longitude = location.longitude.toStringAsFixed(4);
+    final chatMessageData = chatData;
+    if (chatMessageData is ChatMessageGeolocationDto) {
+      final location = chatMessageData.location;
+      final latitude = location.latitude.toStringAsFixed(4);
+      final longitude = location.longitude.toStringAsFixed(4);
 
-        final locationText =
-            'Attached location: $latitude, $longitude';
-        return Text(
-          locationText,
-          style: const TextStyle(color: Colors.green),
-        );
-      } else {
-        return const SizedBox.shrink();
-      }
-    });
+      final locationText = 'Attached location: $latitude, $longitude';
+      return Text(
+        locationText,
+        style: const TextStyle(color: Colors.green),
+      );
+    } else {
+      return const SizedBox.shrink();
+    }
   }
 }
 
