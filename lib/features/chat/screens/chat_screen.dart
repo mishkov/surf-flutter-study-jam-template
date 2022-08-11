@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 import 'package:surf_practice_chat_flutter/features/chat/models/chat_message_dto.dart';
 import 'package:surf_practice_chat_flutter/features/chat/models/chat_message_location_dto.dart';
 import 'package:surf_practice_chat_flutter/features/chat/models/chat_user_dto.dart';
@@ -220,9 +221,29 @@ class GeolocationAttachment extends StatelessWidget {
       final longitude = location.longitude.toStringAsFixed(4);
 
       final locationText = 'Attached location: $latitude, $longitude';
-      return Text(
-        locationText,
-        style: const TextStyle(color: Colors.green),
+
+      const locationLinkColor = Colors.green;
+
+      return GestureDetector(
+        onTap: () {
+          MapsLauncher.launchCoordinates(location.latitude, location.longitude);
+        },
+        child: Row(
+          children: [
+            Text(
+              locationText,
+              style: const TextStyle(
+                color: locationLinkColor,
+                decoration: TextDecoration.underline,
+              ),
+            ),
+            const Icon(
+              Icons.open_in_new,
+              size: 16,
+              color: locationLinkColor,
+            ),
+          ],
+        ),
       );
     } else {
       return const SizedBox.shrink();
