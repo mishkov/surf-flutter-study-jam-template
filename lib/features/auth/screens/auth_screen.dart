@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:surf_practice_chat_flutter/features/auth/exceptions/auth_exception.dart';
 import 'package:surf_practice_chat_flutter/features/auth/models/token_dto.dart';
 import 'package:surf_practice_chat_flutter/features/auth/repository/auth_repository.dart';
@@ -41,8 +40,8 @@ class _AuthScreenState extends State<AuthScreen> {
           children: [
             TextField(
               controller: _loginController,
-              decoration: InputDecoration(
-                label: const Text('Login'),
+              decoration: const InputDecoration(
+                label: Text('Login'),
                 prefixIcon: Icon(Icons.person),
                 border: OutlineInputBorder(),
               ),
@@ -50,8 +49,8 @@ class _AuthScreenState extends State<AuthScreen> {
             const SizedBox(height: 8),
             TextField(
               controller: _passwordController,
-              decoration: InputDecoration(
-                label: const Text('Password'),
+              decoration: const InputDecoration(
+                label: Text('Password'),
                 prefixIcon: Icon(Icons.person),
                 border: OutlineInputBorder(),
               ),
@@ -68,7 +67,11 @@ class _AuthScreenState extends State<AuthScreen> {
                         ),
                       ),
                     ),
-                    onPressed: _signIn,
+                    onPressed: () {
+                      _signIn(onSuccess: (token) {
+                        _pushToChat(context, token);
+                      });
+                    },
                     child: const Text('Login'),
                   ),
           ],
@@ -77,14 +80,17 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 
-  Future<void> _signIn() async {
+  Future<void> _signIn(
+      {required void Function(TokenDto token) onSuccess}) async {
     final login = _loginController.text;
     final password = _passwordController.text;
     try {
-      _isSignInInProcess = true;
+      setState(() {
+        _isSignInInProcess = true;
+      });
       final token =
           await widget.authRepository.signIn(login: login, password: password);
-      _pushToChat(context, token);
+      onSuccess(token);
     } on AuthException catch (e) {
       final snackBar = SnackBar(
         content: Text(e.message),
@@ -97,7 +103,9 @@ class _AuthScreenState extends State<AuthScreen> {
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } finally {
-      _isSignInInProcess = false;
+      setState(() {
+        _isSignInInProcess = false;
+      });
     }
   }
 
