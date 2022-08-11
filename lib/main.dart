@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // TODO: refacotr this piece of shit
       home: FutureBuilder<bool>(
         future: isThereTokenFuture,
         builder: (context, snapshot) {
